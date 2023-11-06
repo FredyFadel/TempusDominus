@@ -268,9 +268,8 @@ Aspectize.Extend("DateTimePicker", {
                 if (typeof currentDate === 'string') {
                     currentDate = dtPicker.dates.parseInput(currentDate);
                 }
-                var format = Aspectize.UiExtensions.GetProperty(elem, 'Format');
 
-                var dt = tempusDominus.DateTime.convert(currentDate);
+                var dt = tempusDominus.DateTime.convert(currentDate, options.localization.locale);
 
                 dtPicker.dates.setValue(dt);
             }
@@ -284,7 +283,7 @@ Aspectize.Extend("DateTimePicker", {
 
                     var value = null;
                     if (e.date) {
-                        value = e.date; //.toDate();                  
+                        value = e.date;              
                     }
                     var format = Aspectize.UiExtensions.GetProperty(elem, 'Format');
 
