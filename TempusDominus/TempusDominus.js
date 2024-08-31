@@ -83,7 +83,7 @@ var aasLocalizations = {
 };
 
 Aspectize.Extend("DateTimePicker", {
-    Properties: { Value: null, MinDate: new Date(0), MaxDate: new Date(0), Stepping: 1, Format: '', Inline: false, ViewMode: 'calendar', UseCurrent: true, SideBySide: false, DefaultDate: new Date(0), Locale: 'fr', Debug: false },
+    Properties: { Value: null, MinDate: new Date(0), MaxDate: new Date(0), Stepping: 1, Format: '', Inline: false, ViewMode: 'calendar', UseCurrent: true, SideBySide: false, DefaultDate: new Date(0), Locale: 'fr', Debug: false, DisableWeekEnds:false },
     Events: ['OnValueChanged'],
     Init: function (elem) {
 
@@ -200,9 +200,22 @@ Aspectize.Extend("DateTimePicker", {
                     }, false);
                 }
 
+                if ('DisableWeekEnds' in arg) {
+
+                    if (arg.DisableWeekEnds) {
+
+                        dtPicker.updateOptions({
+                            restrictions: {
+                                daysOfWeekDisabled: [0, 6]
+                            }
+                        }, false);
+                    }
+                }
                 return null;
 
             } else {
+
+                var disableWeekEnds = Aspectize.UiExtensions.GetProperty(elem, 'DisableWeekEnds');
 
                 var minDate = Aspectize.UiExtensions.GetProperty(elem, 'MinDate');
                 var maxDate = Aspectize.UiExtensions.GetProperty(elem, 'MaxDate');
@@ -218,6 +231,10 @@ Aspectize.Extend("DateTimePicker", {
 
                 var locale = Aspectize.UiExtensions.GetProperty(elem, 'Locale') || Aspectize.CultureInfo.GetCurrentLanguageAndRegion();
                 var format = Aspectize.UiExtensions.GetProperty(elem, 'Format') || Aspectize.CultureInfo.GetRegionInfo().dateFormat;
+
+                if (disableWeekEnds) {
+                    options.restrictions.daysOfWeekDisabled = [0, 6];
+                }
 
                 options.restrictions.minDate = minDate.valueOf() === 0 ? undefined : minDate;
                 options.restrictions.maxDate = maxDate.valueOf() === 0 ? undefined : maxDate;
